@@ -1,7 +1,7 @@
 import './global.css'
 
-import { Helmet, HelmetProvider } from 'react-helmet-async'
 import { RouterProvider } from 'react-router-dom'
+import { Helmet, HelmetProvider } from 'react-helmet-async'
 
 import { ThemeProvider } from './components/theme/theme.provider'
 
@@ -12,6 +12,7 @@ export function App() {
     <HelmetProvider>
       <ThemeProvider storageKey="sislocacao-theme" defaultTheme="dark">
         <Helmet titleTemplate="%s | sislocação" />
+
         <RouterProvider router={router} />
       </ThemeProvider>
     </HelmetProvider>
