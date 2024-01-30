@@ -1,10 +1,32 @@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { AuthContext } from '@/context/authContext'
+import { useContext } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { Link } from 'react-router-dom'
+import { z } from 'zod'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+
+const signInForm = z.object({
+  email: z.string().email(),
+  senha: z.string().min(6),
+})
+
+type signInForm = z.infer<typeof signInForm>
 
 export function SignIn() {
+  const { handleSignIn } = useContext(AuthContext)
+
+  const { register, handleSubmit } = useForm<signInForm>({
+    resolver: zodResolver(signInForm),
+  })
+
+  async function handleLogin(data: signInForm) {
+    await handleSignIn(data)
+  }
+
   return (
     <>
       <Helmet title="login" />
@@ -23,15 +45,15 @@ export function SignIn() {
             </p>
           </div>
 
-          <form className="space-y-4" onSubmit={() => {}}>
+          <form className="space-y-4" onSubmit={handleSubmit(handleLogin)}>
             <div className="space-y-2">
               <Label>E-mail</Label>
-              <Input id="email" type="email" />
+              <Input id="email" type="email" {...register('email')} />
             </div>
 
             <div className="space-y-2">
               <Label>Senha</Label>
-              <Input id="senha" type="password" />
+              <Input id="senha" type="password" {...register('senha')} />
             </div>
 
             <Button type="submit" className="w-full">
